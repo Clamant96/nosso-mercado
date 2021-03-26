@@ -57,6 +57,12 @@ public class ProdutoController {
 		return ResponseEntity.ok(repository.findAllByValorGreaterThanEqual(valor));
 	}
 	
+	@GetMapping("/ativo/{ativo}")
+	public ResponseEntity<List<Produto>> findAllByAtivo(@PathVariable boolean ativo){
+		
+		return ResponseEntity.ok(repository.findAllByAtivo(ativo));
+	}
+	
 	@PostMapping
 	public ResponseEntity<Produto> postProduto(@RequestBody Produto produto){
 		

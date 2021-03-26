@@ -31,6 +31,8 @@ public class Produto {
 	@URL
 	private String urlImagem;
 	
+	private boolean ativo;
+	
 	@ManyToOne
 	@JsonIgnoreProperties("produto")
 	private Usuario usuario;
@@ -85,6 +87,14 @@ public class Produto {
 
 	public void setLoja(Loja loja) {
 		this.loja = loja;
+	}
+
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
 	}
 	
 }
