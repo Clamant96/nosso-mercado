@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.helpconnect.NossoMercado.model.Loja;
 import org.helpconnect.NossoMercado.repository.LojaRepository;
+import org.helpconnect.NossoMercado.service.LojaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/lojas")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class LojaController {
 	
 	@Autowired
 	private LojaRepository repository;
+	
+	@Autowired
+	private LojaService service;
 	
 	@GetMapping
 	public ResponseEntity<List<Loja>> findAllLoja(){
@@ -49,6 +53,21 @@ public class LojaController {
 	public ResponseEntity<Loja> postLoja(@RequestBody Loja loja){
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(loja));
+	}
+	
+	/*
+	 * EXPLICACAO URI:
+	 * 
+	 * 	/plataformaJogo -> nome da tabela associativa
+	 * 	/usuarios -> nome da lista de jogos dentro da classe Loja
+	 * 	/inscricao -> nome da lista de plataformas dentro da classe Usuario
+	 * 
+	 * */
+	
+	@PutMapping("/inscricao/usuarios/{idLoja}/inscricoes/{idUsuario}")
+	public ResponseEntity<Loja> postLojaUsuario(@PathVariable long idLoja, @PathVariable long idUsuario){
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.cadastroUsuarioLoja(idLoja, idUsuario));
 	}
 	
 	@PutMapping
