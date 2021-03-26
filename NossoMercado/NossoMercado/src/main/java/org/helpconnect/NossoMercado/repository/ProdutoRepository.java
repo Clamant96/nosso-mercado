@@ -10,4 +10,8 @@ import org.springframework.stereotype.Repository;
 public interface ProdutoRepository extends JpaRepository<Produto, Long>{
 	public List<Produto> findAllByTituloProdutoContainingIgnoreCase(String tituloProduto);
 	
+	public List<Produto> findAllByValorLessThanEqual(double valor);
+	
+	public List<Produto> findAllByValorGreaterThanEqual(double valor);
+	
 }
