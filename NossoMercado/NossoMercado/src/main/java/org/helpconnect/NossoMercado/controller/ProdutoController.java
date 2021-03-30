@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.helpconnect.NossoMercado.model.Produto;
 import org.helpconnect.NossoMercado.repository.ProdutoRepository;
+import org.helpconnect.NossoMercado.service.LojaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,9 @@ public class ProdutoController {
 	
 	@Autowired
 	private ProdutoRepository repository;
+	
+	@Autowired
+	private LojaService service;
 	
 	@GetMapping
 	public ResponseEntity<List<Produto>> findAllProdutos(){
@@ -69,10 +73,16 @@ public class ProdutoController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(produto));
 	}
 	
-	@PutMapping
+	/*@PutMapping
 	public ResponseEntity<Produto> putProduto(@RequestBody Produto produto){
 		
 		return ResponseEntity.ok(repository.save(produto));
+	}*/
+	
+	@PutMapping
+	public ResponseEntity<Produto> putProduto(@RequestBody Produto produto){
+		
+		return ResponseEntity.ok(service.gerenciarEstoque(produto));
 	}
 	
 	@DeleteMapping("/{id}")

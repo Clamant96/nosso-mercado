@@ -33,6 +33,8 @@ public class Produto {
 	
 	private boolean ativo;
 	
+	private int qtdProduto;
+	
 	@ManyToOne
 	@JsonIgnoreProperties("produto")
 	private Usuario usuario;
@@ -95,6 +97,14 @@ public class Produto {
 
 	public void setAtivo(boolean ativo) {
 		this.ativo = ativo;
+	}
+
+	public int getQtdProduto() {
+		return qtdProduto;
+	}
+
+	public void setQtdProduto(int qtdProduto) {
+		this.qtdProduto = qtdProduto;
 	}
 	
 }
