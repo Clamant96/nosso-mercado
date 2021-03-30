@@ -58,7 +58,7 @@ public class LojaController {
 	/*
 	 * EXPLICACAO URI:
 	 * 
-	 * 	/plataformaJogo -> nome da tabela associativa
+	 * 	/inscricao -> nome da tabela associativa
 	 * 	/usuarios -> nome da lista de jogos dentro da classe Loja
 	 * 	/inscricao -> nome da lista de plataformas dentro da classe Usuario
 	 * 
