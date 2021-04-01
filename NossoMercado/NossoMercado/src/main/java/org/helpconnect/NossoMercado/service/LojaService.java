@@ -23,6 +23,7 @@ public class LojaService {
 	@Autowired
 	private ProdutoRepository produtoRepository;
 	
+	/* CADASTRA UM USUARIO EM UMA LOJA */
 	public Loja cadastroUsuarioLoja(long idLoja, long idUsuario) {
 		
 		Optional<Usuario> usuarioExistente = usuarioRepository.findById(idUsuario);
@@ -40,35 +41,29 @@ public class LojaService {
 		return null;
 	}
 	
+	/* GERENCIA O ESTOQUE SEMPRE QUE UM NOVO PRODUTO E SELECIONADO */
 	public Produto gerenciarEstoque(Produto produto) {
 		Optional<Produto> produtoExistente = produtoRepository.findById(produto.getId());
 		Optional<Usuario> usuarioExistente = usuarioRepository.findById(produto.getUsuario().getIdUsuario());
 		
 		int qtdProdutos = produtoRepository.save(produtoExistente.get()).getQtdProduto();
 		
-		if(usuarioExistente.get().getIdUsuario() == produtoExistente.get().getUsuario().getIdUsuario()) {
+		if(usuarioExistente.get().getIdUsuario() == produtoExistente.get().getUsuario().getIdUsuario() && produto.isAtivo()) {
 			if(qtdProdutos <= 0) {
 				qtdProdutos = produtoRepository.save(produto).getQtdProduto();
 			}
 			
 			produtoExistente.get().setQtdProduto(produtoExistente.get().getQtdProduto() - 1);
+			produtoExistente.get().setAtivo(produto.isAtivo());
 			
 			produtoRepository.save(produtoExistente.get());
 			
 			return produtoRepository.save(produtoExistente.get());
-		
+			
 		}else {
-			if(qtdProdutos <= 0) {
-				qtdProdutos = produtoRepository.save(produto).getQtdProduto();
-			}
-			
-			produto.setQtdProduto(qtdProdutos - 1);
-			
-			produtoRepository.save(produto).getUsuario().getIdUsuario();
-			produtoRepository.save(produtoExistente.get()).getQtdProduto();
+			produto.setQtdProduto(produtoExistente.get().getQtdProduto());
 			
 			return produtoRepository.save(produto);
-			
 		}
 	}
 
