@@ -79,8 +79,8 @@ public class ProdutoController {
 		return ResponseEntity.ok(repository.save(produto));
 	}*/
 	
-	@PutMapping
-	public ResponseEntity<Produto> putProduto(@RequestBody Produto produto){
+	@PutMapping/*("/compras")*/
+	public ResponseEntity<Produto> putProdutoUsuario(@RequestBody Produto produto){
 		
 		return ResponseEntity.ok(service.gerenciarEstoque(produto));
 	}

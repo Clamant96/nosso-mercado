@@ -41,32 +41,58 @@ public class LojaService {
 		return null;
 	}
 	
+	/*
+	 * CORRECOES:
+	 * 	Criar logica para impedir de comprar um produto, caso a pessoa nao esteja cadastrada na loja; <- Pendente
+	 * 
+	 * AJUSTADO:
+	 * 	Diminuicao de estoque ao trocar de comprador;
+	 * 	Ajuste de logica no repository na atualizacao de produtos, AINDA PRECISA DE AJUSTES	
+	 * 
+	 * NOVAS IMPLEMENTENTACOES
+	 * 	Criar novo atributo de carrinho, para somar o valor total a pagar <- Pendente, exemplo na API 'menuNegocio'
+	 * 	Criacao de metodo para acrescentar e retirar produtos de usuarios, e ajustar estoque
+	 * */
+	
 	/* GERENCIA O ESTOQUE SEMPRE QUE UM NOVO PRODUTO E SELECIONADO */
 	public Produto gerenciarEstoque(Produto produto) {
 		Optional<Produto> produtoExistente = produtoRepository.findById(produto.getId());
-		Optional<Usuario> usuarioExistente = usuarioRepository.findById(produto.getUsuario().getIdUsuario());
 		
-		int qtdProdutos = produtoRepository.save(produtoExistente.get()).getQtdProduto();
-		
-		if(qtdProdutos <= 0) {
-			produto.setAtivo(false);
+		if(produto.getUsuario() != null) {
+			Optional<Usuario> usuarioExistente = usuarioRepository.findById(produto.getUsuario().getIdUsuario());
 			
-			qtdProdutos = produtoRepository.save(produto).getQtdProduto();
+			int qtdProdutos = produtoRepository.save(produtoExistente.get()).getQtdProduto();
+			
+			if(qtdProdutos <= 0) {
+				produto.setAtivo(false);
+				
+				qtdProdutos = produtoRepository.save(produto).getQtdProduto();
+			}
+			
+			if(usuarioExistente.get().getIdUsuario() == produto.getUsuario().getIdUsuario() && produto.isAtivo()) {
+				produtoExistente.get().setQtdProduto(produtoExistente.get().getQtdProduto() - 1);
+				produtoExistente.get().setAtivo(produto.isAtivo());
+				
+				produtoRepository.save(produtoExistente.get()).setUsuario(produto.getUsuario());
+				
+				return produtoRepository.save(produtoExistente.get());
+			
+			}else if(produto.isAtivo()) {
+				produto.setQtdProduto(produtoExistente.get().getQtdProduto() - 1);
+				
+				return produtoRepository.save(produto);
+			
+			}else {
+				produto.setQtdProduto(produtoExistente.get().getQtdProduto());
+				
+				return produtoRepository.save(produto);
+				
+			}
+			
 		}
 		
-		if(usuarioExistente.get().getIdUsuario() == produtoExistente.get().getUsuario().getIdUsuario() && produto.isAtivo()) {
-			produtoExistente.get().setQtdProduto(produtoExistente.get().getQtdProduto() - 1);
-			produtoExistente.get().setAtivo(produto.isAtivo());
-			
-			produtoRepository.save(produtoExistente.get());
-			
-			return produtoRepository.save(produtoExistente.get());
-			
-		}else {
-			produto.setQtdProduto(produtoExistente.get().getQtdProduto());
-			
-			return produtoRepository.save(produto);
-		}
+		return produtoRepository.save(produto);
+		
 	}
 
 }

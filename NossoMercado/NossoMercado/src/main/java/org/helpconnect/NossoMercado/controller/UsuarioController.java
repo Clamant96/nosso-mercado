@@ -51,7 +51,7 @@ public class UsuarioController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(usuario));
 	}
 	
-	@PutMapping
+	@PutMapping()
 	public ResponseEntity<Usuario> putUsuario(@RequestBody Usuario usuario){
 		
 		return ResponseEntity.ok(repository.save(usuario));
