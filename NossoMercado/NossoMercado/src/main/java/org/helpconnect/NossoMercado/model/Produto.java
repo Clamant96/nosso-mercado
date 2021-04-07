@@ -35,6 +35,8 @@ public class Produto {
 	
 	private int qtdProduto;
 	
+	private int qtdProdutoAdquirido;
+	
 	@ManyToOne
 	@JsonIgnoreProperties("produto")
 	private Usuario usuario;
@@ -105,6 +107,14 @@ public class Produto {
 
 	public void setQtdProduto(int qtdProduto) {
 		this.qtdProduto = qtdProduto;
+	}
+
+	public int getQtdProdutoAdquirido() {
+		return qtdProdutoAdquirido;
+	}
+
+	public void setQtdProdutoAdquirido(int qtdProdutoAdquirido) {
+		this.qtdProdutoAdquirido = qtdProdutoAdquirido;
 	}
 	
 }

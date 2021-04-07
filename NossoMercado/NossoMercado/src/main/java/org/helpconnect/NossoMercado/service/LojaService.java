@@ -50,8 +50,15 @@ public class LojaService {
 	 * 	Ajuste de logica no repository na atualizacao de produtos, AINDA PRECISA DE AJUSTES	
 	 * 
 	 * NOVAS IMPLEMENTENTACOES
-	 * 	Criar novo atributo de carrinho, para somar o valor total a pagar <- Pendente, exemplo na API 'menuNegocio'
+	 * 	Criar novo atributo de carrinho, para somar o valor total a pagar <- Pendente, exemplo na API 'meuNegocio'
 	 * 	Criacao de metodo para acrescentar e retirar produtos de usuarios, e ajustar estoque
+	 *  
+	 *  Dentro da classe construir um novo atributo, chamado qtdProdutoAdquirido
+	 *  Esse produto e resposavel por armazenar a quantidade de produtos que aquela determianda pessoa comprou
+	 *  	
+	 *  	ATENCAO:
+	 *  	Sempre que trocar de comprador, essa variavel tem que ser zerada
+	 *  	Sempre que que retornar a um comprador que ja aqiquiriu esses produtos, tem que recuperar aquele valor antigo.
 	 * */
 	
 	/* GERENCIA O ESTOQUE SEMPRE QUE UM NOVO PRODUTO E SELECIONADO */
@@ -69,9 +76,12 @@ public class LojaService {
 				qtdProdutos = produtoRepository.save(produto).getQtdProduto();
 			}
 			
-			if(usuarioExistente.get().getIdUsuario() == produto.getUsuario().getIdUsuario() && produto.isAtivo()) {
+			if(/*usuarioExistente.get().getIdUsuario()*/produtoExistente.get().getUsuario().getIdUsuario() == produto.getUsuario().getIdUsuario() && produto.isAtivo()) {
 				produtoExistente.get().setQtdProduto(produtoExistente.get().getQtdProduto() - 1);
 				produtoExistente.get().setAtivo(produto.isAtivo());
+				
+				/* ADICIONANDO PRODUTOS IGUAIS AO USUARIO */
+				produtoExistente.get().setQtdProdutoAdquirido(produtoExistente.get().getQtdProdutoAdquirido() + 1);
 				
 				produtoRepository.save(produtoExistente.get()).setUsuario(produto.getUsuario());
 				
@@ -79,6 +89,14 @@ public class LojaService {
 			
 			}else if(produto.isAtivo()) {
 				produto.setQtdProduto(produtoExistente.get().getQtdProduto() - 1);
+				
+				/* ATRIBUI O VALOR DE QTD PRODUTOS ADQUIRIDOS VINDOS DO BODY */
+				produtoExistente.get().setQtdProdutoAdquirido(produto.getQtdProdutoAdquirido());
+				/* ADICIONANDO PRODUTOS IGUAIS AO USUARIO */
+				produtoExistente.get().setQtdProdutoAdquirido(produtoExistente.get().getQtdProdutoAdquirido() + 1);
+				
+				/* ATUALIZA O VALOR DE PRODUTO PARA NAO SER SOBRESCRITO PELO VALOR DO BODY */
+				produto.setQtdProdutoAdquirido(produtoExistente.get().getQtdProdutoAdquirido());
 				
 				return produtoRepository.save(produto);
 			
