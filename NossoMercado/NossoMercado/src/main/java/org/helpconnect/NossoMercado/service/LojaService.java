@@ -76,6 +76,12 @@ public class LojaService {
 				qtdProdutos = produtoRepository.save(produto).getQtdProduto();
 			}
 			
+			/* APLICANDO DESCONTO AO PRODUTO */
+			if(produtoExistente.get().getValor() == produto.getValor()) {
+				produtoExistente.get().setValor(produtoExistente.get().getValor() - ((produto.getDesconto() / 100) * produtoExistente.get().getValor()));
+			}
+			
+			
 			if(/*usuarioExistente.get().getIdUsuario()*/produtoExistente.get().getUsuario().getIdUsuario() == produto.getUsuario().getIdUsuario() && produto.isAtivo()) {
 				produtoExistente.get().setQtdProduto(produtoExistente.get().getQtdProduto() - 1);
 				produtoExistente.get().setAtivo(produto.isAtivo());
@@ -98,10 +104,21 @@ public class LojaService {
 				/* ATUALIZA O VALOR DE PRODUTO PARA NAO SER SOBRESCRITO PELO VALOR DO BODY */
 				produto.setQtdProdutoAdquirido(produtoExistente.get().getQtdProdutoAdquirido());
 				
+				/* POR MAIS QUE O PRODUTO ESTEJA DESABILIDADE, ELE CONTINUA COM O DESCONTO APLICADO A ELE */
+				produto.setValor(produtoExistente.get().getValor());
+				
 				return produtoRepository.save(produto);
 			
 			}else {
 				produto.setQtdProduto(produtoExistente.get().getQtdProduto());
+				
+				/* POR MAIS QUE O PRODUTO ESTEJA DESABILIDADE, ELE CONTINUA COM O DESCONTO APLICADO A ELE */
+				produto.setValor(produtoExistente.get().getValor());
+				
+				/* CASO A PESSOA TENHA COMPRADO UMA QTD X DE PRODUTOS, ELA PERMANECE EM SEU CARRINHO, POR MAIS QUE O PRODUTO ESTEJA DESABILITADO */
+				if(produtoExistente.get().getUsuario().getIdUsuario() == produto.getUsuario().getIdUsuario()) {
+					produto.setQtdProdutoAdquirido(produtoExistente.get().getQtdProdutoAdquirido());
+				}
 				
 				return produtoRepository.save(produto);
 				
