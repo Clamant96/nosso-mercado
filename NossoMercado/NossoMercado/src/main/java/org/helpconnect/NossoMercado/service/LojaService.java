@@ -81,7 +81,6 @@ public class LojaService {
 				produtoExistente.get().setValor(produtoExistente.get().getValor() - ((produto.getDesconto() / 100) * produtoExistente.get().getValor()));
 			}
 			
-			
 			if(/*usuarioExistente.get().getIdUsuario()*/produtoExistente.get().getUsuario().getIdUsuario() == produto.getUsuario().getIdUsuario() && produto.isAtivo()) {
 				produtoExistente.get().setQtdProduto(produtoExistente.get().getQtdProduto() - 1);
 				produtoExistente.get().setAtivo(produto.isAtivo());
