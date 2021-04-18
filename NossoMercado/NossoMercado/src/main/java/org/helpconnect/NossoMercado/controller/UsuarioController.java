@@ -1,11 +1,9 @@
 package org.helpconnect.NossoMercado.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.helpconnect.NossoMercado.model.UserLogin;
 import org.helpconnect.NossoMercado.model.Usuario;
-import org.helpconnect.NossoMercado.repository.UsuarioRepository;
 import org.helpconnect.NossoMercado.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
